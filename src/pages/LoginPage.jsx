@@ -192,7 +192,7 @@ export default function LoginPage() {
               <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
               <div>
                 <strong className="block">Supabase Keys Missing</strong>
-                <span>Please ensure VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY are defined in .env.</span>
+                <span>Please ensure VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY (or VITE_SUPABASE_ANON_KEY) are defined.</span>
               </div>
             </div>
           )}
