@@ -45,8 +45,16 @@ export default function ForgotPasswordPage() {
       console.error('Password reset request error:', err);
       const rawMessage = err.message || '';
 
-      // If rate limit reached, notify clearly
-      if (rawMessage.toLowerCase().includes('rate limit')) {
+      // If rate limit reached or network failure, notify clearly
+      if (
+        rawMessage.toLowerCase().includes('failed to fetch') ||
+        rawMessage.toLowerCase().includes('network') ||
+        rawMessage.toLowerCase().includes('err_blocked_by_client')
+      ) {
+        setErrorMessage(
+          'Network connection to Supabase failed ("Failed to fetch"). Please check if an ad-blocker, Brave Shields, or firewall is blocking requests to your Supabase project.'
+        );
+      } else if (rawMessage.toLowerCase().includes('rate limit')) {
         setErrorMessage(
           'Supabase email rate limit reached (free tier allows ~3 emails/hour). Please wait a few minutes or configure custom SMTP in Supabase.'
         );

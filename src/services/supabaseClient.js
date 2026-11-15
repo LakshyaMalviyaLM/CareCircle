@@ -1,2 +1,2 @@
-export { supabase, isSupabaseConfigured, supabaseConfigError, supabaseEnvDiagnostics } from './supabase';
+export { supabase, isSupabaseConfigured, supabaseConfigError, supabaseEnvDiagnostics, pingSupabaseHealth } from './supabase';
 export { default } from './supabase';

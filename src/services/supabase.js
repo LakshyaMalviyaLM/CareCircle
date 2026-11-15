@@ -17,10 +17,24 @@ const sanitizeEnvString = (val) => {
 const normalizeSupabaseUrl = (val) => {
   let url = sanitizeEnvString(val);
   if (!url) return '';
+
+  // Auto-correct if user entered the Supabase dashboard URL instead of API URL
+  // e.g. https://supabase.com/dashboard/project/kvzovehlvnuplhgurbjp
+  const dashboardMatch = url.match(/(?:dashboard\/project|project)\/([a-z0-9]+)/i);
+  if (dashboardMatch) {
+    return `https://${dashboardMatch[1]}.supabase.co`;
+  }
+
+  // Auto-correct if user entered bare project ref (e.g. kvzovehlvnuplhgurbjp)
+  if (!url.includes('.') && /^[a-z0-9]{15,30}$/i.test(url)) {
+    return `https://${url}.supabase.co`;
+  }
+
   // Prepend https:// if protocol was omitted
   if (!/^https?:\/\//i.test(url)) {
     url = `https://${url}`;
   }
+
   // Strip trailing slashes
   return url.replace(/\/+$/, '');
 };
@@ -124,6 +138,45 @@ export const supabase = isSupabaseConfigured
         autoRefreshToken: false,
       },
     });
+
+// Ping live Supabase health endpoint to distinguish browser network/adblock blocks from server errors
+export const pingSupabaseHealth = async () => {
+  if (!rawUrl) {
+    return { ok: false, error: 'Supabase URL is not configured in client environment.' };
+  }
+  try {
+    const healthEndpoint = `${rawUrl}/auth/v1/health`;
+    const res = await fetch(healthEndpoint, {
+      method: 'GET',
+      headers: rawKey ? { apikey: rawKey } : {},
+    });
+    if (res.ok) {
+      const info = await res.json().catch(() => ({}));
+      return { ok: true, data: info, endpoint: healthEndpoint };
+    }
+    return {
+      ok: false,
+      status: res.status,
+      statusText: res.statusText,
+      endpoint: healthEndpoint
+    };
+  } catch (err) {
+    return {
+      ok: false,
+      error: err.message || 'Failed to fetch',
+      endpoint: `${rawUrl}/auth/v1/health`
+    };
+  }
+};
+
+// Log active connection details in browser console for production diagnostics
+if (typeof window !== 'undefined') {
+  console.info('[CareCircle Supabase Initialized]', {
+    endpoint: rawUrl || '(none)',
+    hasKey: Boolean(rawKey),
+    isConfigured: isSupabaseConfigured
+  });
+}
 
 export default supabase;
 

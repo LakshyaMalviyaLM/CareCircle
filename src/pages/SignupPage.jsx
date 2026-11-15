@@ -64,7 +64,15 @@ export default function SignupPage() {
     } catch (err) {
       console.error('Signup error:', err);
       const rawMsg = err.message || '';
-      if (rawMsg.toLowerCase().includes('rate limit')) {
+      if (
+        rawMsg.toLowerCase().includes('failed to fetch') ||
+        rawMsg.toLowerCase().includes('network') ||
+        rawMsg.toLowerCase().includes('err_blocked_by_client')
+      ) {
+        setErrorMessage(
+          'Network connection to Supabase failed ("Failed to fetch"). Please check if an ad-blocker, Brave Shields, or firewall is blocking requests to your Supabase project.'
+        );
+      } else if (rawMsg.toLowerCase().includes('rate limit')) {
         setErrorMessage(
           'Supabase email rate limit reached (free tier allows ~3 verification emails/hour). In your Supabase Dashboard: Go to Authentication -> Providers -> Email -> Turn OFF "Confirm email" and click Save, then click Register again!'
         );

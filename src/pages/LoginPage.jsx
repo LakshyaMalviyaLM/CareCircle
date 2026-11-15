@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { supabaseProjectRef, supabaseProjectUrl } from '../services/supabase';
+import { supabaseProjectRef, supabaseProjectUrl, pingSupabaseHealth } from '../services/supabase';
 import {
   HeartPulse,
   Mail,
@@ -15,7 +15,9 @@ import {
   Sparkles,
   ExternalLink,
   Info,
-  Database
+  Database,
+  WifiOff,
+  Activity
 } from 'lucide-react';
 import Button from '../components/common/Button';
 
@@ -29,14 +31,30 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [errorType, setErrorType] = useState(null); // 'invalid_credentials' | 'unconfirmed_email' | 'rate_limit' | 'generic'
+  const [errorType, setErrorType] = useState(null); // 'network' | 'invalid_credentials' | 'unconfirmed_email' | 'rate_limit' | 'generic'
+  const [testingConnection, setTestingConnection] = useState(false);
+  const [pingResult, setPingResult] = useState(null);
 
   const redirectPath = location.state?.from?.pathname || '/';
+
+  const handleTestConnection = async () => {
+    setTestingConnection(true);
+    setPingResult(null);
+    try {
+      const res = await pingSupabaseHealth();
+      setPingResult(res);
+    } catch (err) {
+      setPingResult({ ok: false, error: err.message || 'Test failed' });
+    } finally {
+      setTestingConnection(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
     setErrorType(null);
+    setPingResult(null);
     setLoading(true);
 
     const cleanEmail = email.trim().toLowerCase();
@@ -52,6 +70,19 @@ export default function LoginPage() {
 
       // Accurately classify Supabase error responses instead of assuming incorrect password
       if (
+        rawMessage.toLowerCase().includes('failed to fetch') ||
+        rawMessage.toLowerCase().includes('network') ||
+        rawMessage.toLowerCase().includes('err_blocked_by_client') ||
+        rawMessage.toLowerCase().includes('connection refused') ||
+        errorCode === 'AuthRetryableFetchError' ||
+        err.name === 'AuthRetryableFetchError' ||
+        errorStatus === 0
+      ) {
+        setErrorType('network');
+        setErrorMessage(
+          'Network connection to Supabase failed ("Failed to fetch"). The browser was unable to reach the Supabase authentication server.'
+        );
+      } else if (
         rawMessage.toLowerCase().includes('email not confirmed') ||
         errorCode === 'email_not_confirmed'
       ) {
@@ -116,7 +147,9 @@ export default function LoginPage() {
                 <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
                 <div className="flex-1">
                   <span className="font-bold block text-rose-900 text-sm">
-                    {errorType === 'unconfirmed_email'
+                    {errorType === 'network'
+                      ? 'Network Failure ("Failed to fetch")'
+                      : errorType === 'unconfirmed_email'
                       ? 'Email Confirmation Required'
                       : errorType === 'invalid_credentials'
                       ? 'Invalid Login Credentials (Supabase Response)'
@@ -127,6 +160,60 @@ export default function LoginPage() {
                   <p className="text-rose-700 leading-relaxed mt-0.5">{errorMessage}</p>
                 </div>
               </div>
+
+              {/* Actionable guidance if Browser / Network threw "Failed to fetch" */}
+              {errorType === 'network' && (
+                <div className="pt-2 border-t border-rose-200/80 text-[11px] text-rose-900 space-y-2.5 bg-white/80 p-3.5 rounded-xl">
+                  <div className="flex items-center gap-1.5 font-bold text-rose-950">
+                    <WifiOff className="w-3.5 h-3.5 text-rose-600" />
+                    <span>How to fix this connection failure:</span>
+                  </div>
+
+                  <div className="bg-rose-50/60 p-2.5 rounded-lg border border-rose-200/60 font-mono text-[10px] break-all">
+                    <span className="text-slate-500 block font-sans font-bold uppercase text-[9px]">Active Target Endpoint:</span>
+                    <span className="text-[#142B4A] font-bold">{supabaseProjectUrl ? `${supabaseProjectUrl}/auth/v1/token` : 'Not configured'}</span>
+                  </div>
+
+                  <ul className="list-disc pl-4 space-y-1.5 text-slate-700">
+                    <li>
+                      <strong>1. Ad Blocker / Brave Shields (Most Common):</strong> Extensions like uBlock Origin, Privacy Badger, or Brave Shields often block third-party authentication endpoints. <em>Disable shields / ad-blocker for this site and try again.</em>
+                    </li>
+                    <li>
+                      <strong>2. Vercel API URL Format:</strong> In your Vercel Project Settings ➔ Environment Variables, ensure <code className="text-[#142B4A] bg-slate-100 px-1 py-0.5 rounded font-bold">VITE_SUPABASE_URL</code> is the API URL (<code className="text-[#142B4A]">https://xyz.supabase.co</code>), NOT the dashboard management URL (<code className="text-rose-700 line-through">https://supabase.com/dashboard/...</code>).
+                    </li>
+                    <li>
+                      <strong>3. Network Firewall / VPN:</strong> Check if your network connection or VPN restricts outbound HTTPS calls to <code className="text-[#142B4A]">*.supabase.co</code>.
+                    </li>
+                  </ul>
+
+                  <div className="pt-1 flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={handleTestConnection}
+                      disabled={testingConnection}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#142B4A] hover:bg-[#1E3E6B] text-white font-bold text-[11px] transition-all cursor-pointer shadow-xs"
+                    >
+                      <Activity className={`w-3.5 h-3.5 text-[#13A89E] ${testingConnection ? 'animate-spin' : ''}`} />
+                      <span>{testingConnection ? 'Testing Server...' : 'Test Server Reachability'}</span>
+                    </button>
+                    {pingResult && (
+                      <span className={`text-[11px] font-bold flex items-center gap-1 ${pingResult.ok ? 'text-emerald-700' : 'text-rose-700'}`}>
+                        {pingResult.ok ? (
+                          <>
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                            <span>Server reached (200 OK)! Check browser adblocker.</span>
+                          </>
+                        ) : (
+                          <>
+                            <AlertCircle className="w-3.5 h-3.5 text-rose-600" />
+                            <span>Unreachable ({pingResult.error || 'Blocked'}).</span>
+                          </>
+                        )}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Actionable guidance if Supabase returns Invalid Credentials */}
               {errorType === 'invalid_credentials' && (
