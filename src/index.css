@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --primary-navy: #142B4A;
+    --primary-navy-dark: #0B192C;
+    --primary-navy-light: #1E3E6B;
+    --teal-accent: #13A89E;
+    --teal-accent-hover: #0F8C83;
+    --teal-light: #E6F7F6;
+    --light-blue: #EAF3FC;
+    --light-blue-hover: #D8EAFC;
+    --bg-page: #F6F8FC;
+    --card-white: #FFFFFF;
+    --text-main: #172B4D;
+    --text-secondary: #718096;
+    --color-success: #16A37B;
+    --color-warning: #E9A23B;
+    --color-danger: #DC5555;
+    --border-subtle: #E2E8F0;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #F6F8FC;
+    color: #172B4D;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Design System Utilities */
+.bg-navy-main {
+  background-color: #142B4A;
+}
+
+.bg-navy-dark {
+  background-color: #0B192C;
+}
+
+.text-navy-main {
+  color: #142B4A;
+}
+
+.bg-teal-accent {
+  background-color: #13A89E;
+}
+
+.text-teal-accent {
+  color: #13A89E;
+}
+
+.border-teal-accent {
+  border-color: #13A89E;
+}
+
+.bg-teal-light {
+  background-color: #E6F7F6;
+}
+
+.bg-soft-blue {
+  background-color: #EAF3FC;
+}
+
+.text-soft-blue {
+  color: #EAF3FC;
+}
+
+.text-main {
+  color: #172B4D;
+}
+
+.text-secondary {
+  color: #718096;
+}
+
+.border-subtle {
+  border-color: #E2E8F0;
+}
+
+/* Subtle SaaS Card Hover */
+.card-hover {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -4px rgba(20, 43, 74, 0.08), 0 4px 6px -2px rgba(20, 43, 74, 0.03);
+}
