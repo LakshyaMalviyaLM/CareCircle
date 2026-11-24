@@ -147,21 +147,32 @@ export default function SosModal({ isOpen, onClose }) {
               </div>
 
               {/* Direct Calling options */}
-              <div className="grid grid-cols-2 gap-3 pt-1">
-                <a
-                  href="tel:911"
-                  className="py-3 px-4 rounded-xl bg-black hover:bg-slate-900 text-white font-extrabold text-xs flex items-center justify-center gap-2"
-                >
-                  <PhoneCall className="w-4 h-4 text-rose-400" />
-                  <span>Call 911 Directly</span>
-                </a>
-                <a
-                  href={`tel:${emergencyContacts[0]?.phone || '911'}`}
-                  className="py-3 px-4 rounded-xl border-2 border-slate-300 hover:bg-slate-100 text-[#142B4A] font-extrabold text-xs flex items-center justify-center gap-2"
-                >
-                  <Phone className="w-4 h-4 text-emerald-600" />
-                  <span>Call Primary Contact</span>
-                </a>
+              <div className="p-3.5 rounded-2xl bg-rose-50 border-2 border-rose-300 space-y-2 text-left">
+                <div className="flex items-center justify-between flex-wrap gap-1">
+                  <span className="font-black text-[#142B4A] text-sm">Call Emergency Services</span>
+                  <span className="text-xs font-black bg-rose-600 text-white px-2.5 py-0.5 rounded-full">
+                    Emergency Number: 112
+                  </span>
+                </div>
+                <p className="text-xs text-slate-600">
+                  Description: India's Emergency Response Support
+                </p>
+                <div className="grid grid-cols-2 gap-2.5 pt-1">
+                  <a
+                    href="tel:112"
+                    className="py-3 px-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs flex items-center justify-center gap-2 shadow-md transition-colors"
+                  >
+                    <PhoneCall className="w-4 h-4 text-white" />
+                    <span>Call Emergency Services</span>
+                  </a>
+                  <a
+                    href={`tel:${emergencyContacts[0]?.phone || '112'}`}
+                    className="py-3 px-3 rounded-xl border-2 border-slate-300 hover:bg-slate-100 text-[#142B4A] font-extrabold text-xs flex items-center justify-center gap-2 bg-white transition-colors truncate"
+                  >
+                    <Phone className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span className="truncate">Call Primary Contact</span>
+                  </a>
+                </div>
               </div>
             </div>
           ) : isCountingDown ? (
@@ -207,7 +218,7 @@ export default function SosModal({ isOpen, onClose }) {
                 <div className="leading-relaxed">
                   <strong className="block font-bold">Important Notice:</strong>
                   CareCircle records emergency incidents and alerts authorized care circle members. It does{' '}
-                  <strong>NOT automatically call emergency services (911)</strong>. Call 911 directly if immediate life-saving medical help is needed.
+                  <strong>NOT automatically call emergency services (112)</strong>. Call 112 directly if immediate life-saving medical help is needed.
                 </div>
               </div>
 
@@ -258,22 +269,33 @@ export default function SosModal({ isOpen, onClose }) {
                   <span>START 5-SECOND SOS BROADCAST</span>
                 </button>
 
-                {/* Direct Dialing Shortcuts */}
-                <div className="grid grid-cols-2 gap-3">
-                  <a
-                    href="tel:911"
-                    className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-900 hover:bg-black text-white font-bold text-xs transition-colors"
-                  >
-                    <PhoneCall className="w-4 h-4 text-emerald-400" />
-                    <span>Call 911 Now</span>
-                  </a>
-                  <a
-                    href={`tel:${emergencyContacts[0]?.phone || '911'}`}
-                    className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-slate-200 bg-white hover:bg-slate-50 text-[#142B4A] font-bold text-xs transition-colors truncate"
-                  >
-                    <Phone className="w-4 h-4 text-[#13A89E] shrink-0" />
-                    <span className="truncate">Call {emergencyContacts[0]?.name || 'Caregiver'}</span>
-                  </a>
+                {/* Direct Emergency Services (112) Calling Section */}
+                <div className="p-3.5 rounded-2xl bg-rose-50 border-2 border-rose-300 space-y-2 text-left">
+                  <div className="flex items-center justify-between flex-wrap gap-1">
+                    <span className="font-black text-[#142B4A] text-sm">Call Emergency Services</span>
+                    <span className="text-xs font-black bg-rose-600 text-white px-2.5 py-0.5 rounded-full">
+                      Emergency Number: 112
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-600">
+                    Description: India's Emergency Response Support
+                  </p>
+                  <div className="grid grid-cols-2 gap-2.5 pt-1">
+                    <a
+                      href="tel:112"
+                      className="flex items-center justify-center gap-2 py-3 px-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs shadow-md transition-colors"
+                    >
+                      <PhoneCall className="w-4 h-4 text-white" />
+                      <span>Call Emergency Services</span>
+                    </a>
+                    <a
+                      href={`tel:${emergencyContacts[0]?.phone || '112'}`}
+                      className="flex items-center justify-center gap-2 py-3 px-3 rounded-xl border-2 border-slate-300 bg-white hover:bg-slate-50 text-[#142B4A] font-bold text-xs transition-colors truncate"
+                    >
+                      <Phone className="w-4 h-4 text-[#13A89E] shrink-0" />
+                      <span className="truncate">Call {emergencyContacts[0]?.name || 'Caregiver'}</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

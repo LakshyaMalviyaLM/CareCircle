@@ -75,12 +75,19 @@ export default function EmergencyPage() {
             </div>
           </div>
 
-          {/* Large, Easily Accessible SOS Trigger Button */}
-          <div className="shrink-0 flex items-center gap-3 w-full lg:w-auto">
+          {/* Large, Easily Accessible SOS Trigger Button & Call Emergency Services */}
+          <div className="shrink-0 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
+            <a
+              href="tel:112"
+              className="min-h-[64px] px-6 py-4 rounded-2xl bg-slate-950 hover:bg-black text-white font-extrabold text-sm sm:text-base border-2 border-white/20 shadow-xl transition-all active:scale-95 flex items-center justify-center gap-2.5"
+            >
+              <PhoneCall className="w-5 h-5 text-emerald-400 shrink-0" />
+              <span>Call Emergency Services (112)</span>
+            </a>
             {isSosActive ? (
               <button
                 onClick={clearEmergencySos}
-                className="w-full lg:w-auto min-h-[64px] px-8 py-4 rounded-2xl bg-white hover:bg-rose-50 text-rose-800 font-black text-lg shadow-xl transition-all active:scale-98 cursor-pointer flex items-center justify-center gap-3"
+                className="w-full sm:w-auto min-h-[64px] px-8 py-4 rounded-2xl bg-white hover:bg-rose-50 text-rose-800 font-black text-lg shadow-xl transition-all active:scale-98 cursor-pointer flex items-center justify-center gap-3"
               >
                 <CheckCircle2 className="w-6 h-6 text-emerald-600" />
                 <span>DEACTIVATE / MARK SAFE</span>
@@ -88,7 +95,7 @@ export default function EmergencyPage() {
             ) : (
               <button
                 onClick={() => setIsSosModalOpen(true)}
-                className="w-full lg:w-auto min-h-[68px] px-8 py-4 rounded-2xl bg-white hover:bg-rose-50 text-rose-700 font-black text-xl shadow-2xl transition-all active:scale-95 cursor-pointer flex items-center justify-center gap-3 border-4 border-rose-300"
+                className="w-full sm:w-auto min-h-[68px] px-8 py-4 rounded-2xl bg-white hover:bg-rose-50 text-rose-700 font-black text-xl shadow-2xl transition-all active:scale-95 cursor-pointer flex items-center justify-center gap-3 border-4 border-rose-300"
               >
                 <ShieldAlert className="w-8 h-8 text-rose-600 animate-pulse" />
                 <span>TRIGGER EMERGENCY SOS</span>
@@ -321,12 +328,19 @@ export default function EmergencyPage() {
               <div>
                 <div className="flex items-center justify-between">
                   <Badge variant={hotline.primary ? 'danger' : 'default'} size="sm">
-                    {hotline.primary ? 'Primary 911' : 'Hotline'}
+                    {hotline.primary ? 'Primary 112' : 'Hotline'}
                   </Badge>
                   <PhoneCall className={`w-4 h-4 ${hotline.primary ? 'text-red-600' : 'text-slate-400'}`} />
                 </div>
                 <h4 className="text-sm font-bold text-[#142B4A] mt-2.5">{hotline.title}</h4>
-                <p className="text-xs text-slate-500 mt-1">{hotline.description}</p>
+                {hotline.primary && (
+                  <p className="text-xs font-bold text-rose-700 mt-1">
+                    Emergency Number: {hotline.number}
+                  </p>
+                )}
+                <p className="text-xs text-slate-500 mt-1">
+                  {hotline.primary ? `Description: ${hotline.description}` : hotline.description}
+                </p>
               </div>
 
               <div className="pt-3 border-t border-slate-100">
@@ -339,7 +353,7 @@ export default function EmergencyPage() {
                   }`}
                 >
                   <Phone className="w-3.5 h-3.5" />
-                  <span>Call {hotline.number}</span>
+                  <span>{hotline.primary ? 'Call Emergency Services' : `Call ${hotline.number}`}</span>
                 </a>
               </div>
             </Card>

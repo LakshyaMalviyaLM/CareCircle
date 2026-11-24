@@ -35,10 +35,10 @@ export default function AppLayout() {
             </div>
             <div className="flex items-center gap-2">
               <a
-                href="tel:911"
+                href="tel:112"
                 className="bg-white text-[#DC5555] px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-rose-50 flex items-center gap-1.5 shadow-xs"
               >
-                <PhoneCall className="w-3.5 h-3.5" /> Call 911
+                <PhoneCall className="w-3.5 h-3.5" /> Call 112
               </a>
               <button
                 onClick={clearEmergencySos}

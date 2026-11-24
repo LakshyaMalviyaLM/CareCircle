@@ -762,7 +762,7 @@ export default function VitalsPage() {
       <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/60 flex items-start gap-3 text-xs text-slate-600">
         <Info className="w-4 h-4 text-[#13A89E] shrink-0 mt-0.5" />
         <p className="leading-relaxed">
-          <strong>Important Clinical Tracking Disclaimer:</strong> CareCircle biometrics surveillance is designed for personal routine monitoring and caregiver coordination. All recorded values are manually entered. They do not constitute automated medical diagnoses, clinical condition classifications, or prescription dosage modifications. In the event of acute chest discomfort, severe shortness of breath, dizziness, or medical emergencies, press Emergency SOS or contact emergency medical personnel (911/112) immediately.
+          <strong>Important Clinical Tracking Disclaimer:</strong> CareCircle biometrics surveillance is designed for personal routine monitoring and caregiver coordination. All recorded values are manually entered. They do not constitute automated medical diagnoses, clinical condition classifications, or prescription dosage modifications. In the event of acute chest discomfort, severe shortness of breath, dizziness, or medical emergencies, press Emergency SOS or contact emergency medical personnel (112) immediately.
         </p>
       </div>
 

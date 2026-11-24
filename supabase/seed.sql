@@ -167,9 +167,9 @@ BEGIN
     ),
     (
         patient_uuid,
-        'Emergency Medical Services (EMS)',
-        '911',
-        'First Responders',
+        'Call Emergency Services',
+        '112',
+        'India Emergency Response Support',
         false
     );
 

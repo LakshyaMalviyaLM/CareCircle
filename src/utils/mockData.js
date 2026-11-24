@@ -474,9 +474,9 @@ export const vitalsTrendData = [
 export const emergencyHotlines = [
   {
     id: 'hot-1',
-    title: 'Emergency Medical Services (EMS)',
-    number: '911',
-    description: 'Immediate life-threatening emergencies, chest pain, fall injury, severe shortness of breath.',
+    title: 'Call Emergency Services',
+    number: '112',
+    description: "India's Emergency Response Support",
     primary: true
   },
   {

@@ -40,8 +40,8 @@ CareCircle is a comprehensive, production-grade elderly healthcare management pl
 
 8. **Emergency & Medical SOS Hub**
    - 5-second countdown beacon with immediate family alert broadcast.
-   - Direct 911 one-touch dialing shortcut and attended physician contact.
-   - Prominent disclaimer clarifying that automated 911 dispatch is not claimed.
+   - Direct 112 one-touch dialing shortcut and attended physician contact.
+   - Prominent disclaimer clarifying that automated 112 dispatch is not claimed.
 
 ---
 
